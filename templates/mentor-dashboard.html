@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>MentorTrack — Mentor Dashboard</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="{{ url_for('static', filename='css/mentor.css') }}" rel="stylesheet" />
+</head>
+
+<body class="body-root">
+    <header class="top-navbar">
+        <div class="navbar-container">
+            <div class="navbar-left">
+                <button type="button" id="sidebarToggle" class="sidebar-toggle-button">
+                    <img src="https://api.iconify.design/lucide-menu.svg?color=%230f172a" alt="Menu" class="navbar-toggle-icon" />
+                </button>
+                <a href="{{ url_for('index') }}" class="navbar-brand-link">
+                    <span class="navbar-brand-logo">
+                        <span class="cls-z63pxk">Mentor</span>
+                        <span class="cls-629oat">Track</span>
+                    </span>
+                </a>
+            </div>
+            <div class="navbar-right">
+                <div class="navbar-profile">
+                    <img src="https://api.iconify.design/lucide-user.svg?color=%230f172a" alt="Profile" class="navbar-profile-icon" />
+                    <span class="navbar-profile-name">{{ user_name }}</span>
+                </div>
+                <a href="{{ url_for('logout') }}" class="navbar-logout-button">
+                    <img src="https://api.iconify.design/lucide-log-out.svg?color=%230f172a" alt="Logout" class="navbar-logout-icon" />
+                    <span>Logout</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <div class="app-shell">
+        <aside id="sidebar" class="sidebar">
+            <nav class="sidebar-nav">
+                <a href="{{ url_for('mentor_dashboard') }}" class="sidebar-link">
+                    <img src="https://api.iconify.design/lucide-layout-dashboard.svg?color=%230f172a" alt="Dashboard" class="sidebar-icon" />
+                    <span class="sidebar-link-text">Dashboard</span>
+                </a>
+                <a href="{{ url_for('mentor_dashboard') }}" class="sidebar-link">
+                    <img src="https://api.iconify.design/lucide-users.svg?color=%230f172a" alt="Mentees" class="sidebar-icon" />
+                    <span class="sidebar-link-text">Mentees</span>
+                </a>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <!-- Welcome Card -->
+            <section class="welcome-card">
+                <div class="welcome-header">
+                    <div class="welcome-title-block">
+                        <img src="https://api.iconify.design/lucide-handshake.svg?color=%2300bfa6" alt="Welcome" class="welcome-icon" />
+                        <h1 class="welcome-title">Welcome back, {{ user_name }}</h1>
+                    </div>
+                    <span class="welcome-domain-tag">Mentor Dashboard</span>
+                </div>
+                <p class="welcome-subtitle">Manage your mentees, assign tasks, and track their progress.</p>
+            </section>
+
+            <!-- Stats Section -->
+            <section class="stats-section">
+                <div class="stat-card">
+                    <img src="https://api.iconify.design/lucide-users.svg?color=%2300bfa6" alt="Total mentees" class="stat-icon" />
+                    <div class="stat-content">
+                        <span class="stat-label">Total Mentees</span>
+                        <span class="stat-value">{{ total_mentees }}</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <img src="https://api.iconify.design/lucide-list-todo.svg?color=%2300bfa6" alt="Pending tasks" class="stat-icon" />
+                    <div class="stat-content">
+                        <span class="stat-label">Pending Tasks</span>
+                        <span class="stat-value">{{ pending_tasks }}</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <img src="https://api.iconify.design/lucide-calendar-clock.svg?color=%2300bfa6" alt="Upcoming sessions" class="stat-icon" />
+                    <div class="stat-content">
+                        <span class="stat-label">Upcoming Sessions</span>
+                        <span class="stat-value">{{ upcoming_sessions }}</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Actions Row -->
+            <section class="actions-row">
+                <h2 class="mentees-list-heading">Mentees List</h2>
+                <button type="button" id="openTaskModal" class="create-task-button">
+                    <img src="https://api.iconify.design/lucide-plus.svg?color=%23ffffff" alt="Create" class="create-task-icon" />
+                    <span>Create New Task</span>
+                </button>
+            </section>
+
+            <!-- Mentees List -->
+            <section class="mentees-list-section">
+                <ul class="mentees-list">
+                    {% if mentees %}
+                        {% for mentee in mentees %}
+                        <li class="mentee-item">
+                            <div class="mentee-info">
+                                <img src="https://ui-avatars.com/api/?name={{ mentee.full_name }}&background=14b8a6&color=fff" alt="Mentee" class="mentee-avatar" />
+                                <div class="mentee-text">
+                                    <span class="mentee-name">{{ mentee.full_name }}</span>
+                                    <span class="mentee-track">{{ mentee.email }}</span>
+                                </div>
+                            </div>
+                            <div class="mentee-progress-block">
+                                <div class="progress-bar-track">
+                                    <div class="progress-bar-fill" style="width: {{ mentee.progress }}%"></div>
+                                </div>
+                                <span class="progress-label">{{ mentee.progress }}% completed</span>
+                            </div>
+                            <div class="mentee-actions">
+                                <button class="assign-task-button openAssign" data-mentee="{{ mentee.full_name }}" data-mentorship="{{ mentee.mentorship_id }}">
+                                    <img src="https://api.iconify.design/lucide-plus-circle.svg?color=%230d9488" alt="Assign" class="assign-icon" />
+                                    <span>Assign Task</span>
+                                </button>
+                            </div>
+                        </li>
+                        {% endfor %}
+                    {% else %}
+                        <li class="no-mentees" style="text-align:center; padding:2rem; color:#64748b;">
+                            No mentees yet. Start building your mentorship network!
+                        </li>
+                    {% endif %}
+                </ul>
+            </section>
+
+            <!-- Resource Share -->
+            <section class="resource-share-box">
+                <div class="resource-header">
+                    <h3 class="resource-title">Resource Share</h3>
+                    <img src="https://api.iconify.design/lucide-link.svg?color=%2300bfa6" alt="Link" class="resource-icon" />
+                </div>
+                <p class="resource-description">Share YouTube or Drive links with your mentees.</p>
+                <form id="resourceForm" class="resource-form">
+                    <label for="resourceTitle" class="resource-label">Title</label>
+                    <input type="text" id="resourceTitle" class="resource-textarea" style="height:40px;" placeholder="Resource title" required />
+                    
+                    <label for="resourceLinks" class="resource-label">URL</label>
+                    <input type="url" id="resourceLinks" class="resource-textarea" style="height:40px;" placeholder="https://..." required />
+                    
+                    <div class="resource-actions">
+                        <button type="submit" class="share-button">
+                            <img src="https://api.iconify.design/lucide-send.svg?color=%23ffffff" alt="Share" class="share-icon" />
+                            <span>Share Resource</span>
+                        </button>
+                    </div>
+                </form>
+            </section>
+        </main>
+    </div>
+
+    <!-- Task Modal -->
+    <div id="taskModalOverlay" class="task-modal-overlay" style="display:none;">
+        <div class="task-modal">
+            <div class="task-modal-header">
+                <h3 id="taskModalTitle" class="task-modal-title">Create New Task</h3>
+                <button type="button" id="closeTaskModal" class="task-modal-close">
+                    <img src="https://api.iconify.design/lucide-x.svg?color=%230f172a" alt="Close" class="task-modal-close-icon" />
+                </button>
+            </div>
+            <form id="taskForm" class="task-modal-form">
+                <input type="hidden" id="taskMentorshipId" />
+                <div class="task-field-group">
+                    <label for="taskTitle" class="task-title-label">Task Title</label>
+                    <input type="text" id="taskTitle" name="taskTitle" placeholder="e.g., Build a regression model" required class="task-title-input" />
+                </div>
+                <div class="task-field-group">
+                    <label for="taskDescription" class="task-description-label">Description</label>
+                    <textarea id="taskDescription" name="taskDescription" rows="3" placeholder="Add details and expected outcomes" required class="task-description-input"></textarea>
+                </div>
+                <div class="task-field-group">
+                    <label for="taskDeadline" class="task-deadline-label">Deadline</label>
+                    <input type="date" id="taskDeadline" name="taskDeadline" required class="task-deadline-input" />
+                </div>
+                <div class="task-modal-actions">
+                    <button type="button" id="cancelTaskModal" class="task-cancel-button">
+                        <img src="https://api.iconify.design/lucide-x-circle.svg?color=%230f172a" alt="Cancel" class="cancel-icon" />
+                        <span>Cancel</span>
+                    </button>
+                    <button type="submit" class="task-save-button">
+                        <img src="https://api.iconify.design/lucide-save.svg?color=%23ffffff" alt="Save" class="save-icon" />
+                        <span>Save Task</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-left">
+                <span class="footer-brand">© 2025 MentorTrack</span>
+                <a href="{{ url_for('index') }}" class="footer-link">Home</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Sidebar Toggle
+        const sidebar = document.getElementById('sidebar');
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        
+        sidebarToggle?.addEventListener('click', () => {
+            sidebar.style.display = sidebar.style.display === 'none' ? 'flex' : 'none';
+        });
+
+        // Task Modal
+        const overlay = document.getElementById('taskModalOverlay');
+        const openBtn = document.getElementById('openTaskModal');
+        const closeBtn = document.getElementById('closeTaskModal');
+        const cancelBtn = document.getElementById('cancelTaskModal');
+        const taskForm = document.getElementById('taskForm');
+        const taskMentorshipId = document.getElementById('taskMentorshipId');
+
+        function openModal(mentorship_id = null) {
+            overlay.style.display = 'flex';
+            if (mentorship_id) {
+                taskMentorshipId.value = mentorship_id;
+            }
+        }
+
+        function closeModal() {
+            overlay.style.display = 'none';
+            taskForm.reset();
+        }
+
+        openBtn?.addEventListener('click', () => openModal());
+        closeBtn?.addEventListener('click', closeModal);
+        cancelBtn?.addEventListener('click', closeModal);
+        overlay?.addEventListener('click', (e) => {
+            if (e.target === overlay) closeModal();
+        });
+
+        // Assign task buttons
+        document.querySelectorAll('.openAssign').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const mentorship_id = this.getAttribute('data-mentorship');
+                const mentee = this.getAttribute('data-mentee');
+                document.getElementById('taskModalTitle').textContent = `Create Task for ${mentee}`;
+                openModal(mentorship_id);
+            });
+        });
+
+        // Task Form Submit
+        taskForm?.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const mentorship_id = taskMentorshipId.value;
+            if (!mentorship_id) {
+                alert('Please select a mentee first');
+                return;
+            }
+
+            const data = {
+                mentorship_id: mentorship_id,
+                title: document.getElementById('taskTitle').value,
+                description: document.getElementById('taskDescription').value,
+                deadline: document.getElementById('taskDeadline').value
+            };
+
+            try {
+                const response = await fetch('/api/tasks/create', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+                
+                if (result.success) {
+                    alert('Task created successfully!');
+                    closeModal();
+                    location.reload();
+                } else {
+                    alert('Error: ' + result.error);
+                }
+            } catch (error) {
+                alert('Error creating task: ' + error);
+            }
+        });
+
+        // Resource Form Submit
+        const resourceForm = document.getElementById('resourceForm');
+        resourceForm?.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const data = {
+                title: document.getElementById('resourceTitle').value,
+                url: document.getElementById('resourceLinks').value,
+                type: 'link'
+            };
+
+            try {
+                const response = await fetch('/api/resources/create', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+                
+                if (result.success) {
+                    alert('Resource shared successfully!');
+                    resourceForm.reset();
+                    location.reload();
+                } else {
+                    alert('Error: ' + result.error);
+                }
+            } catch (error) {
+                alert('Error sharing resource: ' + error);
+            }
+        });
+    </script>
+</body>
+</html>

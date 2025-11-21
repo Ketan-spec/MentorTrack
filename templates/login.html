@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>MentorTrack — Login</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="index,follow">
+    <meta name="generator" content="GrapesJS Studio">
+    <link href="{{ url_for('static', filename='css/login.css') }}" rel="stylesheet" />
+    <style>
+#panel-mentor { display: block; }
+#panel-mentee { display: none; }
+
+#tab-mentor:checked ~ #panel-mentor {
+    display: block;
+}
+
+#tab-mentor:checked ~ #panel-mentee {
+    display: none;
+}
+
+#tab-mentee:checked ~ #panel-mentor {
+    display: none;
+}
+
+#tab-mentee:checked ~ #panel-mentee {
+    display: block;
+}
+</style>
+
+</head>
+
+<body>
+    <header class="header-wrapper" id="iyj6ei">
+        <div class="header-container" id="i123o1">
+            <a href="{{ url_for('index') }}" class="brand-link" id="il5x0l">
+                <span class="brand-logo-text" id="iq2jvr">MentorTrack</span>
+            </a>
+        </div>
+    </header>
+
+    <main class="main-content" id="ilrw2w">
+        <section class="login-section" id="iw826z">
+            <div class="login-card-container" id="iirv5q">
+                <div class="login-card" id="i0uchb">
+
+                    <div class="login-card-header" id="i9dwvk">
+                        <h1 class="card-title" id="izng16">Sign in to MentorTrack</h1>
+                        <p class="card-subtitle" id="izngzy">Welcome back! Choose your role below to continue.</p>
+                    </div>
+
+                    <!-- ROLE SWITCH TABS -->
+                    <div class="tabs-wrapper" id="i6rpnm">
+                        <div class="tabs-container" id="iafbrl">
+                            <div class="tabs-inner" id="iqvwrr">
+                                <input type="radio" name="loginRole" id="tab-mentor" checked />
+                                <label for="tab-mentor" class="tab-label-mentor" id="il3air">
+                                    <span>Login as Mentor</span>
+                                </label>
+
+                                <input type="radio" name="loginRole" id="tab-mentee" />
+                                <label for="tab-mentee" class="tab-label-mentee" id="ixj82o">
+                                    <span>Login as Mentee</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr class="divider-line" id="i79wjt" />
+
+                    <!-- MENTOR LOGIN PANEL -->
+                    <div id="panel-mentor" class="panel-mentor">
+                        <form method="post" action="/login" class="mentor-form">
+                            <input type="hidden" name="role" value="mentor" />
+
+                            <label>Email</label>
+                            <input type="email" name="email" required placeholder="you@example.com" />
+
+                            <label>Password</label>
+                            <input type="password" name="password" required placeholder="Enter your password" />
+
+                            <button type="submit" class="login-button-mentor">Login</button>
+
+                            <div class="sign-up-prompt-mentor">
+                                <span>Don't have an account?</span>
+                                <a href="{{ url_for('signup') }}">Sign Up</a>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- MENTEE LOGIN PANEL -->
+                    <div id="panel-mentee" class="panel-mentee">
+                        <form method="post" action="/login" class="mentee-form">
+                            <input type="hidden" name="role" value="mentee" />
+
+                            <label>Email</label>
+                            <input type="email" name="email" required placeholder="you@example.com" />
+
+                            <label>Password</label>
+                            <input type="password" name="password" required placeholder="Enter your password" />
+
+                            <button type="submit" class="login-button-mentee">Login</button>
+
+                            <div class="sign-up-prompt-mentee">
+                                <span>Don't have an account?</span>
+                                <a href="{{ url_for('signup') }}">Sign Up</a>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+
+                <div class="additional-help-links" id="iez7ah">
+                    <a href="{{ url_for('index') }}" class="back-to-home-link">Back to Home</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer-wrapper" id="ie0f0o">
+        <div class="footer-container">
+            <p>© MentorTrack 2025</p>
+            <div class="social-actions">
+                <a href="https://www.linkedin.com/in/ketan-lohakare-a05797303/" target="_blank">
+                    LinkedIn
+                </a>
+                <a href="https://github.com/Ketan-spec" target="_blank">
+                    GitHub
+                </a>
+            </div>
+        </div>
+    </footer>
+    <script>
+const tabMentor = document.getElementById("tab-mentor");
+const tabMentee = document.getElementById("tab-mentee");
+
+const panelMentor = document.getElementById("panel-mentor");
+const panelMentee = document.getElementById("panel-mentee");
+
+function updatePanels() {
+    panelMentor.style.display = tabMentor.checked ? "block" : "none";
+    panelMentee.style.display = tabMentee.checked ? "block" : "none";
+}
+
+tabMentor.addEventListener("change", updatePanels);
+tabMentee.addEventListener("change", updatePanels);
+
+updatePanels();
+
+// FIXED: Show alert without preventing form submission
+document.querySelectorAll("form").forEach(form => {
+    form.addEventListener("submit", function (e) {
+        const role = form.querySelector('input[name="role"]').value;
+        
+        if (role === "mentor") {
+            console.log("Logging in as Mentor...");
+        } else {
+            console.log("Logging in as Mentee...");
+        }
+        
+        // Let the form submit naturally - don't preventDefault!
+    });
+});
+</script>
+
+
+</body>
+
+</html>

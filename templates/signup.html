@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Signup Page — MentorTrack</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow">
+  <meta name="generator" content="GrapesJS Studio">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/signup.css') }}">
+</head>
+
+<body class="body">
+
+  <!-- NAVBAR -->
+  <header class="header-navbar">
+    <div class="navbar-container">
+
+      <!-- Brand -->
+      <a href="/" class="group navbar-brand-link">
+        <span class="brand-icon-wrap">
+          <img alt="MentorTrack logo mark" src="https://api.iconify.design/lucide-compass.svg?color=%2300bfa6"
+            class="brand-icon" />
+        </span>
+        <span class="brand-name">MentorTrack</span>
+      </a>
+
+      <!-- Navbar Buttons -->
+      <nav class="navbar-actions">
+        <a href="/login" class="navbar-login-link">
+          <img alt="" src="https://api.iconify.design/lucide-log-in.svg?color=%230f172a" class="login-icon" />
+          <span>Login</span>
+        </a>
+
+        <a href="/signup" class="navbar-signup-link">
+          <img alt="" src="https://api.iconify.design/lucide-user-plus.svg?color=%23ffffff" class="signup-icon" />
+          <span>Sign Up</span>
+        </a>
+      </nav>
+
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <main class="main-content">
+    <section class="signup-section">
+      <div class="signup-wrapper">
+
+        <!-- Signup Card -->
+        <div class="form-card">
+          <div class="form-header">
+            <h1 class="page-heading">Create your MentorTrack Account</h1>
+            <p class="heading-subtext">Join as a mentor or mentee and start your growth journey.</p>
+          </div>
+
+          <!-- SIGNUP FORM (FLASK READY) -->
+          <form method="post" action="/signup" class="signup-form">
+
+            <div class="field-group-fullname">
+              <label for="full-name">Full Name</label>
+              <input type="text" id="full-name" name="username" required placeholder="Your full name">
+            </div>
+
+            <div class="field-group-email">
+              <label for="email">Email</label>
+              <input type="email" id="email" name="email" required placeholder="you@example.com">
+            </div>
+
+            <div class="field-group-password">
+              <label for="password">Password</label>
+              <input type="password" id="password" name="password" required placeholder="Enter your password">
+            </div>
+
+            <div class="field-group-password-confirm">
+              <label for="confirm-password">Confirm Password</label>
+              <input type="password" id="confirm-password" name="confirm_password" required
+                placeholder="Re-enter your password">
+            </div>
+
+            <div class="field-group-role">
+              <label for="role">Register As</label>
+              <select id="role" name="role" required>
+                <option value="mentor">Mentor</option>
+                <option value="mentee">Mentee</option>
+              </select>
+            </div>
+
+            <button type="submit" class="signup-button">Create Account</button>
+
+          </form>
+        </div>
+
+        <!-- Security Section -->
+        <div class="security-note">
+          <div class="security-note-header">
+            <img alt="" src="https://api.iconify.design/lucide-shield.svg?color=%2300bfa6" class="security-icon" />
+            <span class="security-title">Your privacy matters</span>
+          </div>
+          <p class="security-description">We securely store your data and never share it without your permission.</p>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-brand">
+        <span class="footer-logo-wrap">
+          <img alt="" src="https://api.iconify.design/lucide-compass.svg?color=%2300bfa6" class="footer-logo-icon" />
+        </span>
+        <span class="footer-brand-name">MentorTrack</span>
+      </div>
+
+      <div class="footer-social-actions">
+        <a href="#" class="social-button-twitter">
+          <img alt="" src="https://api.iconify.design/lucide-twitter.svg?color=%2300bfa6" class="social-icon-twitter" />
+          <span>Twitter</span>
+        </a>
+        <a href="#" class="social-button-linkedin">
+          <img alt="" src="https://api.iconify.design/lucide-linkedin.svg?color=%2300bfa6"
+            class="social-icon-linkedin" />
+          <span>LinkedIn</span>
+        </a>
+        <a href="#" class="social-button-github">
+          <img alt="" src="https://api.iconify.design/lucide-github.svg?color=%2300bfa6" class="social-icon-github" />
+          <span>GitHub</span>
+        </a>
+      </div>
+
+    </div>
+  </footer>
+
+</body>
+</html>
